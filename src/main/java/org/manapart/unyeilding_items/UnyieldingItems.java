@@ -46,8 +46,10 @@ public class UnyieldingItems {
     @SubscribeEvent
     public void onDestroy(PlayerDestroyItemEvent event) {
         ItemStack item = event.getOriginal();
-        repairItem(item);
-        event.getEntityPlayer().addItemStackToInventory(item);
+        if (shouldRepair(item)) {
+            item.getItem().setDamage(item, 1);
+            event.getEntityPlayer().addItemStackToInventory(item);
+        }
     }
 
     @SubscribeEvent
