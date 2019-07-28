@@ -2,11 +2,14 @@ package org.manapart.unyeilding_items;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -20,7 +23,7 @@ public class UnyieldingItems {
     }
 
     @SubscribeEvent
-    public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+    public void onRightClickITem(PlayerInteractEvent.RightClickItem event) {
         repairItemInHand(event.getEntityPlayer(), event.getHand());
     }
 
@@ -30,29 +33,36 @@ public class UnyieldingItems {
     }
 
     @SubscribeEvent
-    public void onLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
-        repairItemInHand(event.getEntityPlayer(), event.getHand());
+    public void onHoeUse(UseHoeEvent event) {
+        repairItemInHand(event.getEntityPlayer(), Hand.MAIN_HAND);
     }
 
     @SubscribeEvent
-    public void onPickup(PlayerEvent.ItemPickupEvent event) {
-        repairItem(event.getStack());
+    public void onPickup(EntityItemPickupEvent event) {
+//    public void onPickup(PlayerEvent.ItemPickupEvent event) {
+        repairItem(event.getItem().getItem());
     }
 
     @SubscribeEvent
     public void onDestroy(PlayerDestroyItemEvent event) {
         ItemStack item = event.getOriginal();
         repairItem(item);
-        event.getEntityPlayer().setHeldItem(event.getHand(), item);
+        event.getEntityPlayer().addItemStackToInventory(item);
     }
 
     @SubscribeEvent
     public void onHurt(LivingHurtEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            for (ItemStack stack : player.getArmorInventoryList()) {
-                repairItem(stack);
-            }
+            repairAll(player);
+        }
+    }
+
+    private void repairAll(PlayerEntity player) {
+        repairItemInHand(player, Hand.MAIN_HAND);
+        repairItemInHand(player, Hand.OFF_HAND);
+        for (ItemStack stack : player.getArmorInventoryList()) {
+            repairItem(stack);
         }
     }
 
