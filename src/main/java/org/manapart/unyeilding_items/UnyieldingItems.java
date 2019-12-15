@@ -2,7 +2,6 @@ package org.manapart.unyeilding_items;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -12,7 +11,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("unyielding_items")
@@ -81,7 +79,7 @@ public class UnyieldingItems {
 
     private boolean shouldRepair(ItemStack stack) {
         if (stack != null) {
-            return stack.getItem().isDamageable() || stack.getItem().isRepairable();
+            return stack.getItem().isDamageable() || stack.getItem().isRepairable(stack);
         }
         return false;
     }
