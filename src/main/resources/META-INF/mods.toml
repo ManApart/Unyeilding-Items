@@ -14,7 +14,7 @@ issueTrackerURL="http://my.issue.tracker/" #optional
 # The modid of the mod
 modId="unyielding_items" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
-version="${file.jarVersion}" #mandatory
+version="1.0" #mandatory
  # A display name for the mod
 displayName="Unyielding Items" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
@@ -29,7 +29,7 @@ credits="Items never break" #optional
 authors="ManApart" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Items never berak
+Items never break
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.examplemod]] #optional
