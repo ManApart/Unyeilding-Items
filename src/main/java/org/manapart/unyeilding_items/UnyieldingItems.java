@@ -5,39 +5,43 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
-import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.UseHoeEvent;
+import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("unyielding_items")
 public class UnyieldingItems {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public UnyieldingItems() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
-    public void onRightClickITem(PlayerInteractEvent.RightClickItem event) {
-        repairItemInHand(event.getEntityPlayer(), event.getHand());
+    public void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        repairItemInHand(event.getPlayer(), event.getHand());
     }
 
     @SubscribeEvent
     public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        repairItemInHand(event.getEntityPlayer(), event.getHand());
+        repairItemInHand(event.getPlayer(), event.getHand());
     }
 
     @SubscribeEvent
     public void onHoeUse(UseHoeEvent event) {
-        repairItemInHand(event.getEntityPlayer(), Hand.MAIN_HAND);
+        repairItemInHand(event.getPlayer(), Hand.MAIN_HAND);
     }
 
     @SubscribeEvent
     public void onPickup(EntityItemPickupEvent event) {
-//    public void onPickup(PlayerEvent.ItemPickupEvent event) {
         repairItem(event.getItem().getItem());
     }
 
@@ -46,7 +50,7 @@ public class UnyieldingItems {
         ItemStack item = event.getOriginal();
         if (shouldRepair(item)) {
             item.getItem().setDamage(item, 1);
-            event.getEntityPlayer().addItemStackToInventory(item);
+            event.getPlayer().addItemStackToInventory(item);
         }
     }
 
