@@ -50,7 +50,7 @@ public class UnyieldingItems {
         ItemStack item = event.getOriginal();
         if (shouldRepair(item)) {
             item.getItem().setDamage(item, 1);
-            event.getPlayer().addItemStackToInventory(item);
+            event.getPlayer().addItem(item);
         }
     }
 
@@ -65,13 +65,13 @@ public class UnyieldingItems {
     private void repairAll(PlayerEntity player) {
         repairItemInHand(player, Hand.MAIN_HAND);
         repairItemInHand(player, Hand.OFF_HAND);
-        for (ItemStack stack : player.getArmorInventoryList()) {
+        for (ItemStack stack : player.getArmorSlots()) {
             repairItem(stack);
         }
     }
 
     private void repairItemInHand(PlayerEntity player, Hand hand) {
-        repairItem(player.getHeldItem(hand));
+        repairItem(player.getItemInHand(hand));
     }
 
     private void repairItem(ItemStack stack) {
@@ -83,7 +83,7 @@ public class UnyieldingItems {
 
     private boolean shouldRepair(ItemStack stack) {
         if (stack != null) {
-            return stack.getItem().isDamageable() || stack.getItem().isRepairable(stack);
+            return stack.getItem().isDamageable(stack) || stack.getItem().isRepairable(stack);
         }
         return false;
     }
