@@ -18,7 +18,7 @@ version = '1.0'
 group = 'org.manapart' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'unyieldingItems'
 
-//java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
