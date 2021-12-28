@@ -1,8 +1,8 @@
 package org.manapart.unyeilding_items
 
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.util.Hand
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent
@@ -19,7 +19,7 @@ class UnyieldingItems {
     init {
         FORGE_BUS.addListener { event: RightClickItem -> repairItemInHand(event.player, event.hand) }
         FORGE_BUS.addListener { event: LeftClickBlock -> repairItemInHand(event.player, event.hand) }
-        FORGE_BUS.addListener { event: UseHoeEvent -> repairItemInHand(event.player, Hand.MAIN_HAND) }
+        FORGE_BUS.addListener { event: UseHoeEvent -> repairItemInHand(event.player, InteractionHand.MAIN_HAND) }
         FORGE_BUS.addListener { event: EntityItemPickupEvent -> repairItem(event.item.item) }
         FORGE_BUS.addListener(::onDestroy)
         FORGE_BUS.addListener(::onHurt)
@@ -34,21 +34,21 @@ class UnyieldingItems {
     }
 
     fun onHurt(event: LivingHurtEvent) {
-        if (event.entityLiving is PlayerEntity) {
-            val player = event.entityLiving as PlayerEntity
+        if (event.entityLiving is Player) {
+            val player = event.entityLiving as Player
             repairAll(player)
         }
     }
 
-    private fun repairAll(player: PlayerEntity) {
-        repairItemInHand(player, Hand.MAIN_HAND)
-        repairItemInHand(player, Hand.OFF_HAND)
+    private fun repairAll(player: Player) {
+        repairItemInHand(player, InteractionHand.MAIN_HAND)
+        repairItemInHand(player, InteractionHand.OFF_HAND)
         for (stack in player.armorSlots) {
             repairItem(stack)
         }
     }
 
-    private fun repairItemInHand(player: PlayerEntity, hand: Hand) {
+    private fun repairItemInHand(player: Player, hand: InteractionHand) {
         repairItem(player.getItemInHand(hand))
     }
 
