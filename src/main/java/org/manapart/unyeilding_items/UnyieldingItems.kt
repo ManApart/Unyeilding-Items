@@ -8,18 +8,16 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem
-import net.minecraftforge.event.entity.player.UseHoeEvent
+//import net.minecraftforge.event.entity.player.UseHoeEvent
 import net.minecraftforge.fml.common.Mod
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod("unyielding_items")
 class UnyieldingItems {
 
     init {
         FORGE_BUS.addListener { event: RightClickItem -> repairItemInHand(event.player, event.hand) }
         FORGE_BUS.addListener { event: LeftClickBlock -> repairItemInHand(event.player, event.hand) }
-        FORGE_BUS.addListener { event: UseHoeEvent -> repairItemInHand(event.player, InteractionHand.MAIN_HAND) }
         FORGE_BUS.addListener { event: EntityItemPickupEvent -> repairItem(event.item.item) }
         FORGE_BUS.addListener(::onDestroy)
         FORGE_BUS.addListener(::onHurt)
