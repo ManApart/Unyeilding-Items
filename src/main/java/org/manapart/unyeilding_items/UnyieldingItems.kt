@@ -3,6 +3,7 @@ package org.manapart.unyeilding_items
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraftforge.event.entity.living.LivingFallEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent
@@ -21,6 +22,7 @@ class UnyieldingItems {
         FORGE_BUS.addListener { event: EntityItemPickupEvent -> repairItem(event.item.item) }
         FORGE_BUS.addListener(::onDestroy)
         FORGE_BUS.addListener(::onHurt)
+        FORGE_BUS.addListener(::onFall)
     }
 
     fun onDestroy(event: PlayerDestroyItemEvent) {
@@ -28,6 +30,13 @@ class UnyieldingItems {
         if (shouldRepair(item)) {
             item.item.setDamage(item, 1)
             event.entity.addItem(item)
+        }
+    }
+
+    fun onFall(event: LivingFallEvent) {
+        if (event.entity is Player) {
+            val player = event.entity as Player
+            repairAll(player)
         }
     }
 
