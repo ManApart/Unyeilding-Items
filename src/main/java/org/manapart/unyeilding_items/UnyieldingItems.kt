@@ -16,8 +16,8 @@ import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 class UnyieldingItems {
 
     init {
-        FORGE_BUS.addListener { event: RightClickItem -> repairItemInHand(event.player, event.hand) }
-        FORGE_BUS.addListener { event: LeftClickBlock -> repairItemInHand(event.player, event.hand) }
+        FORGE_BUS.addListener { event: RightClickItem -> repairItemInHand(event.entity, event.hand) }
+        FORGE_BUS.addListener { event: LeftClickBlock -> repairItemInHand(event.entity, event.hand) }
         FORGE_BUS.addListener { event: EntityItemPickupEvent -> repairItem(event.item.item) }
         FORGE_BUS.addListener(::onDestroy)
         FORGE_BUS.addListener(::onHurt)
@@ -27,13 +27,13 @@ class UnyieldingItems {
         val item = event.original
         if (shouldRepair(item)) {
             item.item.setDamage(item, 1)
-            event.player.addItem(item)
+            event.entity.addItem(item)
         }
     }
 
     fun onHurt(event: LivingHurtEvent) {
-        if (event.entityLiving is Player) {
-            val player = event.entityLiving as Player
+        if (event.entity is Player) {
+            val player = event.entity as Player
             repairAll(player)
         }
     }
